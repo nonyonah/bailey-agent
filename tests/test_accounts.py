@@ -1,6 +1,8 @@
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"plugins/bailey_productivity"))
 import unittest
 import importlib.util
-from pathlib import Path
 spec = importlib.util.spec_from_file_location("bailey_accounts_test", Path(__file__).resolve().parents[1]/"plugins/bailey_productivity/accounts.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)

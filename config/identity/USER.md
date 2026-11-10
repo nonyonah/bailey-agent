@@ -1,19 +1,19 @@
 # Owner profile
 
-- Assistant name: Bailey (explicit owner preference).
-- Timezone: Africa/Lagos.
-- Briefings are on demand: "What do I have today?" or similar in either chat; no automatic morning/evening notifications.
+- Owner: Nonso Onah (prefers Nonso), Design Engineer.
+- Projects: hedwig.riftlabs.xyz, dobby.riftlabs.xyz, elf-docs.riftlabs.xyz.
+- Assistant name: Bailey (explicit owner preference). Timezone: Africa/Lagos.
 - Prefers concise, natural communication and essential clarifying questions only.
-- Host: existing InstaBox Free; accepts pauses between uses.
-- Channels: iMessage via Photon, verified live; Slack selected for private work DMs,
-  credentials saved and validated, real replies verified. WhatsApp and Telegram disabled.
-- iMessage is primary; Slack is a manual fallback. Reply only in the requesting chat.
-- Model: OpenRouter free-model router; no paid model fallback.
-- Text replies by default; audio when explicitly requested.
-- Prioritizes privacy, free/open-source tools, and inexpensive infrastructure.
-- Payments disabled for Phases 1–4; no financial authorization from voice.
-
-Owner's name, occupation, projects, and calendar are not yet known.
-
-- Access is for the owner alone. Add nobody unless the owner explicitly requests it.
-- Keep Slack enabled; backups and storage encryption are explicitly deferred.
+- Text replies by default; audio only when explicitly requested.
+§
+Channels: iMessage via Photon is primary; Slack is a manual fallback. Both verified live; reply only in the requesting chat.
+§
+Briefings are on demand; automatic 08:00/20:00 jobs are paused by owner preference. Host: existing InstaBox Free; accepts pauses between uses.
+§
+Model: Nous Portal free tier; no paid fallback. Prioritizes privacy, free/open-source tools, and inexpensive infrastructure.
+§
+Composio Gmail/Calendar use bailey_accounts for reads and bailey_writes for approval-gated proposals (email send/draft, calendar create/update/delete). Bailey never approves or executes writes; owner uses the operator CLI. bailey_tasks stores tasks. No payments.
+§
+Access is for the owner alone; never add senders without explicit instruction. Keep Slack enabled. Backups and storage encryption are deferred.
+§
+Payments disabled for Phases 1–4; no financial authorization from voice or chat.

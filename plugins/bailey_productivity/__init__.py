@@ -55,3 +55,6 @@ def register(ctx):
 
     from .accounts import SCHEMA as account_schema, handle as account_handler
     ctx.register_tool(name="bailey_accounts",toolset="bailey_accounts",schema=account_schema,handler=account_handler)
+
+    from .writes import SCHEMA as write_schema, handle as write_handler
+    ctx.register_tool(name="bailey_writes",toolset="bailey_writes",schema=write_schema,handler=write_handler)

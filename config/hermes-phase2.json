@@ -1,7 +1,10 @@
 {
   "model": {
-    "provider": "openrouter",
-    "default": "openrouter/free"
+    "provider": "nous",
+    "default": "upstage/solar-mini4:free"
+  },
+  "auxiliary": {
+    "free_only": true
   },
   "timezone": "Africa/Lagos",
   "platforms": {
@@ -27,7 +30,8 @@
       "session_search",
       "tts",
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ],
     "cron": [
       "memory",
@@ -38,7 +42,8 @@
       "session_search",
       "tts",
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ],
     "whatsapp_cloud": [
       "memory",
@@ -50,7 +55,8 @@
       "session_search",
       "tts",
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ]
   },
   "memory": {
@@ -100,23 +106,28 @@
   "known_plugin_toolsets": {
     "cli": [
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ],
     "cron": [
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ],
     "photon": [
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ],
     "whatsapp_cloud": [
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ],
     "slack": [
       "bailey_tasks",
-      "bailey_accounts"
+      "bailey_accounts",
+      "bailey_writes"
     ]
   }
 }

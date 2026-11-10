@@ -24,13 +24,13 @@ threat model and requires a new review.
 
 ## Secrets and storage
 
-Hermes auth.json contains refresh/device tokens; .env contains Photon/Groq secrets.
+Hermes auth.json contains Nous refresh/device tokens; .env contains Photon/Groq secrets.
 Native memory and state.db can contain personal conversations. Directories use
 0700 and files 0600 under a dedicated unprivileged OS account. At-rest encryption
 must come from the VPS's encrypted volume/LUKS; SQLite WAL is not encryption.
 The deployment explicitly requires an operator confirmation before activation.
 
-OAuth scopes and token refresh are owned by the native Qwen/Photon login. No email,
+OAuth scopes and token refresh are owned by the native Nous/Photon login. No email,
 calendar, GitHub or payment scopes are requested. Service root credentials and
 backup secrets stay in root-only /etc/bailey, outside the agent's readable profile.
 The bailey account cannot use sudo. Root-owned operations code cannot be rewritten
@@ -65,7 +65,7 @@ native database while Hermes is running. See operations for the operator workflo
 ## Known limits
 
 The gateway process itself must access its native auth tokens. Hosted Photon,
-Qwen, Groq and Edge are data processors, so this is private single-owner deployment,
+Nous Portal, Groq (optional STT) and Edge are data processors, so this is private single-owner deployment,
 not offline processing. The same OS user can change its own profile; policy checks
 catch drift at startup, not host compromise while running. Interactive owner slash
 commands remain upstream functionality; do not treat an authorized owner as an
@@ -85,3 +85,26 @@ not evidence of a bypass and does not satisfy the live rejection criterion.
 Backups and storage encryption are explicitly deferred; neither is represented
 as configured or verified. The guest uses direct ext4 disks; provider encryption
 at rest is unverified.
+
+
+## Phase 2 account and approval boundary
+
+The deployed Phase 2 catalog adds personal tasks, fixed Gmail/Calendar reads and
+write proposals. Composio OAuth credentials stay in Hermes' private token storage.
+Provider OAuth consent can be broader than the agent's tools; permissions are
+restricted by fixed operation/account builders and the exact startup tool policy.
+No generic Composio execution, shell, proxy or workbench is exposed to the model.
+
+`bailey_writes` can propose, list, inspect status and cancel an unapproved proposal.
+Only the separate operator CLI approves or executes, using the reviewed proposal
+ID and payload-bound code. The code is an integrity/review check, not a secret or
+an authentication factor: the private OS/SSH operator access is the authorization
+boundary. Terminal/file tools remain disabled in Bailey. This is not isolation
+against a compromised service account; that account owns its SQLite proposal DB
+and OAuth tokens. Payments remain disabled and need a separate future service.
+
+Approvals expire; transactional state claims prevent duplicate dispatch. Provider
+failure/unknown outcomes cannot be treated as success or retried automatically.
+Calendar PATCH avoids replacement of omitted fields; guest/recurring/non-owner
+events and versions changed since review are rejected. The chosen Composio tools
+lack atomic If-Match support, leaving a last-read/write race. See phase2/COMPOSIO.md.

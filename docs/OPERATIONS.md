@@ -91,11 +91,12 @@ in identity/memory files.
 | Symptom | Check |
 | --- | --- |
 | Gateway refuses startup | Exact policy, private permissions, required secrets, installed Python/dependencies and actual tool definitions. Do not widen the allowlist to silence errors. |
-| Model login works in CLI but gateway fails | Same HERMES_HOME and bailey user; refresh Qwen OAuth through native hermes model; then verify/reset reviewed config. |
+| Model login works in CLI but gateway fails | Same HERMES_HOME and bailey user; refresh Nous Portal OAuth through native hermes model; then verify/reset reviewed config. |
+| Model calls fail with 401/429, or gateway refuses startup on credentials | Nous Portal free-tier limit or a credential marked failed by an upstream error. Inspect `hermes auth list nous`, run `hermes auth reset nous` after confirming the credential is intact, and re-authenticate with `hermes auth add nous --type oauth --no-browser` if needed. Keep `auxiliary.free_only: true`; wait for the free-tier reset. Do not buy credits without owner approval. |
 | No iMessage | Native Photon status, device approval, project credentials, owner E.164 allowlist, opted-in first message, and live sidecar health. |
 | Briefing exists but does not arrive | Running gateway/sidecar, exact home recipient, first-message opt-in, timezone, cron status and separate delivery errors. |
 | Voice note fails | GROQ_API_KEY/quota or local Whisper install/model, FFmpeg, supported audio and 20 MB cap; inspect privately and request typed input. |
-| Image/document cannot be understood | Attachment transport is distinct from extraction/vision. Qwen model may lack image support; general document tools are deliberately off. |
+| Image/document cannot be understood | Attachment transport is distinct from extraction/vision. The selected Nous free model may lack image support; general document tools are deliberately off. |
 | Repeated service failure | Fix underlying issue, then root resets failed state and restarts; inspect journal without exposing credentials. |
 | Backup failure | Repository reachability, host key, root-only credentials/password, free space, restic locks and service restart; do not forcibly unlock an active writer. |
 | Missed/uncertain cron fire | Inspect native status/receipts, make an operator decision before resume/retry. Reconcile never silently resumes paused jobs. |
@@ -113,3 +114,43 @@ three. HF_HOME is `/home/bailey/data/cache/huggingface` so model cache writes st
 within the service sandbox. Local Whisper uses small. Raw tools are exposed
 directly rather than deferred behind tool search; the allowed tool set remains
 memory, session_search and text_to_speech. Human voice checks are still open.
+
+The Nous Portal free account is subject to free-tier request limits. An earlier
+OpenRouter route exhausted its free-models-per-day limit during Phase 2 testing on
+2026-11-10 and marked the pooled credential auth-failed, blocking the gateway
+pre-start credential check. Bailey now uses Nous Portal OAuth with
+`upstage/solar-mini4:free`; `hermes auth reset nous` clears a failed credential and
+`hermes auth add nous --type oauth --no-browser` re-authenticates if required.
+Reviewed configuration keeps `auxiliary.free_only: true` so background auxiliary
+calls cannot silently use a paid OpenRouter model.
+
+
+## Review and execute Gmail/Calendar proposals
+
+Load the private runtime environment and run as `bailey`, with
+`PYTHONPATH=/opt/bailey:$HERMES_SOURCE` and `HERMES_HOME=/home/bailey/data`.
+Use `$HERMES_PYTHON /opt/bailey/deploy/approvals.py` with:
+
+```text
+list
+show PROPOSAL_ID
+approve PROPOSAL_ID --confirm APPROVAL_CODE
+execute PROPOSAL_ID --confirm APPROVAL_CODE
+reject PROPOSAL_ID --note "Reason"
+events PROPOSAL_ID
+```
+
+Review `show` first, including full To/Cc/Bcc, subject/body or the complete calendar
+preview and existing event version. Approval expires with the proposal after 24h.
+Approval alone changes nothing. Run execute only for the reviewed, specifically
+authorized action. The model cannot approve or execute through its tools.
+After deployment the owner approved one test Gmail draft, which saved successfully.
+Live email-send and calendar-mutation acceptance remains outstanding.
+
+`uncertain` or `executing` requires checking Gmail/Calendar before doing anything
+else. Never blindly retry, reset the row, or create a replacement send to work
+around the terminal state. A network timeout may occur after Google accepted the
+operation. `failed` records an explicit provider/preflight rejection; review it
+before deciding whether a fresh proposal is appropriate. Receipts are compact
+resource IDs, not full email/event response bodies. Calendar version preflight
+is not an atomic conditional write; see phase2/COMPOSIO.md for the remaining race.

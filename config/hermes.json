@@ -1,7 +1,10 @@
 {
   "model": {
-    "provider": "openrouter",
-    "default": "openrouter/free"
+    "provider": "nous",
+    "default": "upstage/solar-mini4:free"
+  },
+  "auxiliary": {
+    "free_only": true
   },
   "timezone": "Africa/Lagos",
   "platforms": {

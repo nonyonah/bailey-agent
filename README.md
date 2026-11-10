@@ -7,14 +7,17 @@ owner-only DMs. Real AI replies are verified on both. WhatsApp and Telegram are 
 [Slack setup](docs/SLACK.md) for the app manifest and private token entry.
 
 **Phase 1 remains in progress.** Hermes v0.23.0 is installed on persistent storage.
-The updated owner number is registered with Photon; opt-in and a real two-way AI conversation are verified. OpenRouter free inference and structured tool
+The updated owner number is registered with Photon; opt-in and a real two-way AI conversation are verified. Nous Portal free-tier inference and structured tool
 calling passed. The owner confirmed improved transcription in both channels and playable audio.
 Automatic process restart and full reboot persistence/reconnection passed.
 Remaining security acceptance checks are tracked in docs/ACCEPTANCE.md.
 Backups are deferred by explicit owner preference. Payments are
 disabled. **Phase 2 is in progress:** persistent personal tasks and read-only Gmail/Calendar
-through Composio are deployed. See [Phase 2 setup and limits](docs/phase2/COMPOSIO.md).
-Phases 3–5 have not started.
+through Composio are deployed and the owner confirmed a grounded calendar/task
+briefing from chat. Operator-gated Gmail/Calendar proposals are also deployed, and an owner-approved
+Gmail test draft was saved successfully. Live email-send/calendar-write acceptance,
+the task chat round trip, read-only GitHub and research remain outstanding. See
+[Phase 2 setup and limits](docs/phase2/COMPOSIO.md). Phases 3–5 have not started.
 
 The full scope is preserved in [the original request](docs/PROJECT_REQUEST.md).
 Current setup: [InstaBox and iMessage onboarding](docs/INSTABOX.md).
@@ -30,7 +33,7 @@ configuration and operations helpers, not a second agent framework.
 
 - Identity: `$HERMES_HOME/SOUL.md`; owner/context: `memories/USER.md` and `MEMORY.md`.
 - Structured session history: native `state.db`, checked read-only for integrity/WAL.
-- Model: `openrouter/free`, with free-provider availability and request limits.
+- Model: `upstage/solar-mini4:free` via Nous Portal free tier, with free-tier request limits.
 - Voice: local Faster-Whisper small model, with native dependencies installed;
   optional Groq configuration remains supported. Edge TTS on explicit request.
 - Briefings: ask “What do I have today?” in either chat. Automatic morning/evening
@@ -51,8 +54,14 @@ Photon uses its managed iMessage connection and a local supervised sidecar.
 No public webhook is needed. An inbound iMessage does not wake a paused box;
 reconnection and missed-message behavior still require live testing.
 
-OpenRouter free inference has quotas and variable model availability. No paid
-fallback is configured. Local transcription uses CPU/RAM; Edge TTS is online.
+Nous Portal free-tier inference has request limits and variable model availability.
+An earlier OpenRouter route hit its free-models-per-day limit on 2026-11-10; Bailey
+now uses the Nous Portal free tier. No paid fallback is configured, and
+`auxiliary.free_only` blocks paid background auxiliary calls. If the Nous credential
+is rejected or a free-tier limit is reached, inspect `hermes auth list nous`, run
+`hermes auth reset nous` after confirming the credential is intact, and re-run
+`hermes auth add nous --type oauth --no-browser` if re-authentication is required.
+Local transcription uses CPU/RAM; Edge TTS is online.
 Hosted messaging/model/TTS providers receive relevant data. Off-host backup storage
 may incur costs. File permissions and WAL do not encrypt a disk: verify at-rest
 volume encryption before storing live credentials/activating the service.
@@ -101,7 +110,7 @@ Load it as bailey using `set -a; source /etc/bailey/runtime.env; set +a`, then:
 ```
 
 The offline check verifies policy and installed APIs without proving credentials.
-The normal check additionally requires Photon project credentials and a native OpenRouter credential. The gateway always uses the normal
+The normal check additionally requires Photon project credentials and a native Nous Portal credential. The gateway always uses the normal
 check. Exact config drift, unknown environment overrides and unexpected tools block
 startup; discovery wrappers are checked against the full underlying tool catalog.
 
@@ -124,8 +133,10 @@ The reconciliation helper now pauses legacy Bailey briefing jobs and never creat
 or resumes schedules. The owner replaced 08:00/20:00 pushes with on-demand requests.
 Ask “What do I have today?” or “What is left today?” in either chat; replies stay in
 that chat. Slack is a manual fallback, not automatic failover or message mirroring.
-Calendar, email and task integrations are not connected, so current briefings use
-only confirmed memory and conversations.
+Briefings read the primary Google Calendar and persistent tasks through the
+`bailey_accounts` and `bailey_tasks` plugin tools; Gmail search is read-only.
+Email/calendar writes require a reviewed proposal and private operator approval
+and execution. Chat cannot approve or execute. Payments remain unavailable.
 
 ## Tests and acceptance
 
@@ -134,9 +145,11 @@ python3 -m unittest discover -s tests -v
 for script in deploy/*.sh; do bash -n "$script" || exit; done
 ```
 
-Twenty-nine local tests cover owner restrictions, endpoint/config drift, secret
-permissions, credential-preserving migration, schedules, SQLite and backup-failure
-recovery. All 29 tests and the installed-Hermes credential/tool policy check passed on the
-box after the iMessage migration. Fixtures are tests only.
+Sixty-three local tests cover owner restrictions, endpoint/config drift, secret
+permissions, credential-preserving migration, schedules, SQLite, personal tasks,
+bounded account reads, write approval/expiry/tamper/duplicate handling and backup-failure
+recovery. All 63 tests and the
+installed-Hermes credential/tool policy check passed on the box after the Phase 2
+rollout. Fixtures are tests only.
 The live sender, voice, messaging, reboot and restore checks are listed
 in ACCEPTANCE.md; configuration existence is not live evidence.

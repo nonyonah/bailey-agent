@@ -1,4 +1,4 @@
-# Architecture and Phase 1 plan
+# Architecture
 
 Inspection date: 2026-11-09. The workspace was empty. Official upstream source and
 documentation were inspected before implementation. A full shallow clone was
@@ -8,11 +8,14 @@ and some GitHub requests were rate-limited. No upstream code is forked or vendor
 ```mermaid
 flowchart LR
   Owner[Owner iMessage] <--> Photon[Photon managed Spectrum]
+  Slack[Owner Slack DM] <--> Gateway
   Photon <--> Node[Hermes supervised Node sidecar / loopback]
   Node <--> Gateway[Hermes gateway / systemd unprivileged user]
-  Gateway <--> Model[OpenRouter free router]
+  Gateway <--> Model[Nous Portal free tier]
   Gateway <--> Voice[Local Whisper STT / Edge TTS]
   Gateway <--> State[Native SQLite sessions and memories]
+  Gateway <--> Tasks[Local bailey-tasks.db / WAL]
+  Gateway <--> Accounts[Composio Gmail + Calendar / read-only]
   Cron[Hermes native cron] --> Gateway
   State --> Backup[Root-only encrypted restic backups]
 ```
@@ -25,7 +28,7 @@ platform plugin with a supervised Node Spectrum sidecar, authenticated loopback
 transport, sender allowlisting, inbound attachments and voice, outbound media,
 and reconnection. No public webhook or Mac relay is needed.
 
-Configuration and native CLI cover identity, memory, OpenRouter OAuth, Photon onboarding,
+Configuration and native CLI cover identity, memory, Nous Portal OAuth, Photon onboarding,
 voice providers, timezone and briefings. Custom code only installs the profile,
 validates a restricted configuration, registers native jobs, and supports operations.
 No custom agent, messaging adapter, transcription service, scheduler, or session DB.
@@ -35,7 +38,7 @@ No custom agent, messaging adapter, transcription service, scheduler, or session
 1. Preserve the complete request and roadmap; inspect official docs/source.
 2. Configure a private profile with SOUL.md and memories/USER.md; text-first voice.
 3. Restrict tools to memory, session search, and TTS; deny payment-capable routes.
-4. Use official installation and interactive OpenRouter/Photon authentication on the VPS.
+4. Use official installation and interactive Nous Portal/Photon authentication on the VPS.
 5. Register two native cron jobs with explicit Lagos timezone and Photon delivery.
 6. Supervise the gateway with systemd, monitor local health and rotate logs.
 7. Encrypt off-host backups; document restore and live acceptance evidence.
@@ -49,16 +52,43 @@ iMessage capability still need validation. Photon
 assigns the assistant's line. A router/data-only number is not assumed to support
 iMessage. The free shared-line recipient must initiate a conversation first.
 
-No new structured database is needed in Phase 1. Hermes state.db is the source of
-session history; the readiness check verifies SQLite integrity and WAL. Future
-business schemas/migrations and all Phases 2–5 remain deferred. Backups stop the
-gateway so SQLite and file state are copied consistently, including WAL sidecars.
+Phase 1 needs no new structured database. Hermes state.db is the source of session
+history; the readiness check verifies SQLite integrity and WAL. Phase 2 adds one
+local SQLite database (`bailey-tasks.db`, WAL, schema version 1) owned by the
+`bailey_tasks` tool, separate from Hermes' agent-worker Kanban and from general
+memory. Future financial/reading schemas and all Phases 3–5 remain deferred.
+Backups stop the gateway so SQLite and file state are copied consistently,
+including WAL sidecars.
+
+## Phase 2 extension
+
+The same Hermes profile loads one reviewed local plugin, `bailey-productivity`,
+with three bounded tools:
+
+- `bailey_tasks` — owner-only personal tasks, tentative/confirmed commitments,
+  due dates, priorities, completion and daily/weekly/monthly recurrence. It
+  schedules no push reminders and dispatches no workers.
+- `bailey_accounts` — exactly three read operations: Gmail search, Gmail message
+  read and primary-calendar event listing through Composio. Tool slugs and account
+  aliases are fixed; ranges require timezone-aware dates and are capped at 93 days.
+- `bailey_writes` — immutable write proposals in `bailey-writes.db` (WAL), with
+  payload-bound approvals, expiry and at-most-once dispatch. Only the operator CLI
+  approves/executes; the model never receives those methods.
+
+Composio OAuth tokens stay in Hermes' native private `mcp-tokens` directory. The
+model never receives generic Composio execution, proxy, shell or workbench tools,
+and no direct email-send or calendar-mutation tool is exposed. The private operator
+CLI can execute reviewed proposals. GitHub and web research remain unimplemented. The
+profile policy check resolves the full per-channel tool catalog (CLI, Photon,
+Slack, disabled WhatsApp Cloud and cron) before startup and fails closed on drift.
+`known_plugin_toolsets` records the custom toolsets so new plugin tools cannot be
+enabled silently on cron or a disabled channel.
 
 Policy prompts are defense in depth, not a security boundary. The small tool list,
 no MCP/connectors, no payment credentials, and dedicated OS user enforce Phase 1's
 boundary. This reduces useful capabilities intentionally; attachments requiring
 general file/browser tools are not enabled. Images may require a vision-capable
-model; Qwen coder compatibility must be validated live.
+model; the selected Nous free model is validated for tool calling but is not assumed to be vision-capable.
 
 ## Official references
 

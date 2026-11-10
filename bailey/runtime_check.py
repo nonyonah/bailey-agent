@@ -21,9 +21,12 @@ def main():
     cfg = load_config()
     if not args.offline:
         from hermes_cli.runtime_provider import resolve_runtime_provider
-        creds = resolve_runtime_provider(requested="openrouter", target_model="openrouter/free")
+        model_cfg = cfg.get("model") or {}
+        provider = model_cfg.get("provider") or "nous"
+        target_model = model_cfg.get("default") or "upstage/solar-mini4:free"
+        creds = resolve_runtime_provider(requested=provider, target_model=target_model)
         if not creds.get("api_key"):
-            raise RuntimeError("OpenRouter model credentials are unavailable")
+            raise RuntimeError(f"{provider} model credentials are unavailable")
     for platform in ("cli", "photon", "slack", "whatsapp_cloud", "cron"):
         toolsets = _get_platform_tools(cfg, platform)
         # Hermes 0.23 may replace deferred schemas with discovery/call wrappers.
@@ -33,7 +36,7 @@ def main():
         names = {item.get("function", {}).get("name", item.get("name")) for item in definitions}
         permitted = ALLOWED if platform != "cron" else ALLOWED - {"text_to_speech"}
         if phase == 2 and platform in {"cli", "photon", "slack"}:
-            permitted = permitted | {"bailey_tasks", "bailey_accounts"}
+            permitted = permitted | {"bailey_tasks", "bailey_accounts", "bailey_writes"}
         if not names or not names <= permitted:
             raise RuntimeError(f"Unsafe or incompatible resolved tools for {platform}")
         if platform in {"photon", "slack", "whatsapp_cloud"} and names != permitted:

@@ -7,7 +7,7 @@ and account-specific runtime limits (120 minutes on Nov 9; 480 minutes on Nov 10
 Read current limits from `instabox get`; do not assume a fixed cap.
 A dedicated bailey user and persistent home bind mount are prepared; Hermes
 **v0.23.0**, commit `2bd378ed1b`, is installed. All 21 helper tests pass on Linux;
-installed tool-catalog/API checks and systemd unit verification pass. OpenRouter OAuth is saved in the native pool. The supervised gateway is running
+installed tool-catalog/API checks and systemd unit verification pass. Nous Portal OAuth is saved in the native pool. The supervised gateway is running
 for live messaging. Storage encryption verification, off-host backups and permanent
 boot activation remain pending.
 
@@ -86,14 +86,14 @@ paused guest. Scheduled delivery and reconnect behavior need live acceptance.
 
 ## Model authentication correction
 
-OpenRouter OAuth **was saved in the native credential pool** (`openrouter_pkce`).
-The old `hermes auth status openrouter` report did not enumerate that pool.
-`hermes auth list openrouter` confirmed one credential, without revealing its value.
-Qwen CLI v0.27.1 removed the legacy free command Hermes v0.23.0 recommends; the owner
-selected a compatible free model instead. No Qwen subscription was purchased.
+Nous Portal OAuth **is saved in the native credential pool**. `hermes auth list
+nous` confirmed one credential, without revealing its value. Qwen CLI v0.27.1 removed
+the legacy free command Hermes v0.23.0 recommends, so the owner selected the Nous
+Portal free tier instead. No Qwen subscription was purchased.
 
-Real OpenRouter free inference and structured tool calling passed on 2026-11-10;
-no tool action was executed by that isolated model probe.
+Real Nous Portal free-tier inference and structured tool calling passed on
+2026-11-10 with `upstage/solar-mini4:free`; no tool action was executed by that
+isolated model probe.
 
 ## Second channel requested
 

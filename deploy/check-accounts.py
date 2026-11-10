@@ -3,6 +3,8 @@ import asyncio
 import importlib.util
 import json
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"plugins/bailey_productivity"))
 
 spec=importlib.util.spec_from_file_location('bailey_account_probe',Path(__file__).resolve().parents[1]/'plugins/bailey_productivity/accounts.py')
 accounts=importlib.util.module_from_spec(spec)

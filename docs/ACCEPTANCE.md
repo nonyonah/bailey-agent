@@ -20,8 +20,8 @@ permissions/symlinks, unreviewed endpoints, tool/config drift, missing credentia
 local STT option, idempotent job reconciliation, paused/duplicate/error cases,
 read-only SQLite/WAL checks, and restart after backup failure. Test fixtures do not
 represent working integrations. Systemd unit definitions and the installed Hermes tool catalog were subsequently
-verified on the existing InstaBox. Restic backup execution remains untested. OpenRouter free inference and structured
-tool calling passed on 2026-11-10. The Linux helper suite also passed all 29 tests.
+verified on the existing InstaBox. Restic backup execution remains untested. Nous Portal free-tier inference and structured
+tool calling passed on 2026-11-10. The Linux helper suite also passed all 42 tests.
 
 ## Hosting adjustment accepted by owner
 
@@ -37,7 +37,7 @@ remain required.
 
 - [ ] VPS encrypted volume confirmed; SSH-only firewall; bailey has no sudo.
 - [ ] Hermes version/commit and dependency Python recorded; runtime check passes.
-- [x] OpenRouter free account completes a real inference and structured tool-call probe.
+- [x] Nous Portal free account completes a real inference and structured tool-call probe.
 - [x] Saved model credentials reused after supervised gateway restart; real Slack reply verified.
 - [x] Photon project ready; replacement owner number registered and opt-in verified live.
 - [x] Owner confirmed receiving a real AI reply through iMessage on the replacement number.
@@ -73,7 +73,7 @@ First-message opt-in is verified live. The supervised gateway and loopback sidec
 are running. The owner confirmed receiving both the connection test and a real AI reply.
 
 Live messaging evidence: owner confirmed receipt of the outbound connection test.
-The next owner iMessage reached a Photon session and produced an OpenRouter free
+The next owner iMessage reached a Photon session and produced a Nous Portal free-tier
 assistant response (one model API call, no logged error). The owner confirmed AI-reply receipt, and Hermes reports the reply delivered. Two native briefing jobs were reconciled to Photon; next-run
 and actual briefing deliveries remain acceptance checks.
 
@@ -88,7 +88,7 @@ app credentials and real Slack/Photon coexistence checks remain pending.
 Latest live evidence (2026-11-10): Slack and Photon state connected after fixing
 the service's writable native state directory. Slack user confirmed a real reply;
 native Slack delivery state is delivered. Both legacy jobs have enabled=false and
-state=paused. All 29 tests pass locally and on Linux. Phase 2 is not yet cleared.
+state=paused. All 42 tests pass locally and on Linux. Phase 2 is not yet cleared.
 
 Voice correction (2026-11-10): the owner corrected their initial “both worked”
 report: accent transcription was inaccurate and no playable audio was delivered on
@@ -156,3 +156,57 @@ and briefing skill were replaced and the owner started `/new`, the owner confirm
 Bailey successfully checked calendar and tasks from chat. Grounded on-demand
 briefing acceptance passed. A persistent task create/complete chat round trip,
 GitHub/research and external-write approval gates remain outstanding.
+
+Phase 2 state check (2026-11-10): the live profile reports phase 2; Photon and
+Slack both report connected; both legacy briefing jobs remain paused. The native
+owner profile had reached its 1,375-character cap, so memory consolidation was
+failing; USER.md was compacted to 1,182 characters and MEMORY.md to 231 with the
+originals archived privately, then the gateway was restarted and both transports
+reconnected. All 42 tests pass locally and on the box.
+
+Phase 2 tool-level task acceptance (2026-11-10): a real model tool call through the
+deployed CLI created a confirmed probe task and a second call completed it. SQLite
+shows exactly one task with created and completed events, WAL and integrity ok. This
+validates the deployed plugin but does not replace the remaining chat round trip.
+The second call also exposed OpenRouter's free-models-per-day limit: mixed 429 and
+upstream 401 responses marked the pooled credential auth-failed, and the gateway
+entered a restart loop because its pre-start check requires a usable credential.
+`hermes auth reset openrouter` cleared the failed state, the runtime check passed,
+the gateway started, and Photon and Slack reconnected. The reviewed config now sets
+`auxiliary.free_only: true` to block paid auxiliary fallback and is deployed. To
+remove the quota dependency, the owner then completed Nous Portal OAuth. The deployed
+profile now uses `nous` with `upstage/solar-mini4:free`; a real deployed tool call
+listed tasks successfully after the switch. The persistent task create/complete chat
+round trip remains to be confirmed in iMessage.
+
+Nous Portal free-tier switch (2026-11-10): the owner completed Nous device OAuth
+for nonyonah@gmail.com. The reviewed profile now selects provider `nous` and model
+`upstage/solar-mini4:free`; the live profile was migrated and `run-helper.sh check`
+passed. `deploy/check-model.py` verified real inference and structured tool calling;
+a deployed CLI turn listed tasks through `bailey_tasks` with provider=nous. The
+gateway restarted with Photon and Slack connected. `auxiliary.free_only: true`
+remains set so paid background fallback stays blocked.
+
+
+Reviewed Gmail/Calendar continuation (2026-11-10): unfinished local proposal code
+was reviewed, hardened and deployed. 62 tests passed locally and remotely; native
+plugin validation and all five live Composio write-input contracts passed. Real
+Gmail search and calendar reads still pass; Photon and Slack remain connected.
+Model tools expose proposals/status/cancellation, never approval or execution.
+Tests cover nested provider failures, missing receipts/uncertain outcomes,
+action/payload tampering, expiry, concurrent dispatch and calendar guest/version
+checks. Updates now use PATCH. No live email/calendar write was executed. Chat
+proposal acceptance and approved live execution remain pending; Phase 2 is not complete.
+
+Chat proposal acceptance (2026-11-10): the owner confirmed Bailey displayed the
+Gmail test draft preview, proposal ID and approval code. Proposal creation did not
+approve or execute the write. A live approved draft save is awaiting the owner's
+specific approval; live email-send and calendar-mutation execution are untested.
+
+Approved Gmail draft acceptance (2026-11-10): the owner explicitly approved a
+single test draft to example@example.com, subject Bailey check, body This is a
+test., with no Cc/Bcc. The exact proposal was approved and executed through the
+operator flow; Gmail returned a draft resource ID. No email was sent. An earlier
+chat-created proposal used a different recipient and was left unapproved. All
+63 tests pass locally and on the box. The model cannot approve/execute proposals;
+email-send and calendar-mutation live checks are still outstanding.

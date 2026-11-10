@@ -30,7 +30,8 @@ try:
     for source in (home.parent/'composio-onboarding'/'mcp-tokens').glob('composio*'):
         if source.is_symlink() or not source.is_file():
             raise ValueError('Invalid native Composio credential file')
-        replace_private(token_dir/source.name,source.read_text())
+        if not (token_dir/source.name).exists():
+            replace_private(token_dir/source.name,source.read_text())
     env = read_env(home/'.env')
     migrate(home,env['PHOTON_ALLOWED_USERS'],enable_whatsapp=False,enable_slack=True,phase=2)
     replace_private(home/'SOUL.md',(ROOT/'config/identity/SOUL-phase2.md').read_text())

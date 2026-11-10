@@ -15,7 +15,7 @@ Before implementing anything, inspect the current Hermes Agent repository and it
 - **Agent framework:** Hermes Agent (Nous Research)
 - **Primary interface:** iMessage using Photon
 - **Hosting:** Linux VPS, running continuously
-- **LLM:** Qwen OAuth or another compatible free hosted model
+- **LLM:** Nous Portal free tier (selected; Qwen OAuth was evaluated but unavailable)
 - **Programming language:** Python for Hermes-native integrations; TypeScript/Node.js where appropriate for supporting services
 - **Database:** SQLite with WAL mode
 - **Memory:** Hermes native memory, supplemented with structured persistent storage
@@ -60,7 +60,7 @@ Set up Hermes Agent on a Linux VPS.
 ### Requirements
 
 1. Install and configure Hermes using the official installation process.
-2. Configure a compatible free hosted LLM, preferably Qwen OAuth.
+2. Configure a compatible free hosted LLM; Nous Portal free tier is selected.
 3. Integrate Photon as the iMessage gateway.
 4. Restrict incoming messages to my authorized phone number.
 5. Configure Hermes memory and personal identity.

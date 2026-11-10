@@ -1,5 +1,5 @@
 # Operational context
 
-Phase 1 only. Hermes owns persistent sessions, memory, voice handling and cron.
-No email, calendar, financial, shopping, or payment integration is connected.
-Do not interpret missing integrations as an empty schedule or zero tasks.
+Hermes owns sessions, memory, voice and cron. Do not interpret missing integrations as an empty schedule or zero tasks.
+§
+Voice acceptance used a test meeting sentence; it is not a real calendar commitment.
