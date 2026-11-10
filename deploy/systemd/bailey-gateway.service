@@ -1,0 +1,35 @@
+[Unit]
+Description=Bailey personal assistant (native Hermes gateway)
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=bailey
+Group=bailey
+WorkingDirectory=/home/bailey
+EnvironmentFile=/etc/bailey/runtime.env
+ExecStart=/opt/bailey/deploy/run-gateway.sh
+Restart=always
+RestartSec=15
+TimeoutStopSec=120
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/bailey/data /home/bailey/.hermes /home/bailey/.local/state/hermes
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

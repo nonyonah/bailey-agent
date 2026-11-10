@@ -1,0 +1,89 @@
+{
+  "model": {
+    "provider": "openrouter",
+    "default": "openrouter/free"
+  },
+  "timezone": "Africa/Lagos",
+  "platforms": {
+    "photon": {
+      "enabled": true
+    },
+    "telegram": {
+      "enabled": false
+    },
+    "whatsapp": {
+      "enabled": false
+    },
+    "whatsapp_cloud": {
+      "enabled": false
+    },
+    "slack": {
+      "enabled": false
+    }
+  },
+  "platform_toolsets": {
+    "cli": [
+      "memory",
+      "session_search",
+      "tts"
+    ],
+    "cron": [
+      "memory",
+      "session_search"
+    ],
+    "photon": [
+      "memory",
+      "session_search",
+      "tts"
+    ],
+    "whatsapp_cloud": [
+      "memory",
+      "session_search",
+      "tts"
+    ],
+    "slack": [
+      "memory",
+      "session_search",
+      "tts"
+    ]
+  },
+  "memory": {
+    "memory_enabled": true
+  },
+  "stt": {
+    "provider": "groq",
+    "language": "en"
+  },
+  "tts": {
+    "provider": "edge",
+    "edge": {
+      "voice": "en-NG-AbeoNeural"
+    }
+  },
+  "cron": {
+    "wrap_response": false
+  },
+  "sessions": {
+    "retention_days": 90
+  },
+  "agent": {
+    "disabled_toolsets": [
+      "terminal",
+      "file",
+      "browser",
+      "web",
+      "search",
+      "code_execution",
+      "delegation",
+      "connections",
+      "skills",
+      "cronjob",
+      "computer_use"
+    ]
+  },
+  "tools": {
+    "tool_search": {
+      "enabled": "off"
+    }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "model": {
+    "provider": "openrouter",
+    "default": "openrouter/free"
+  },
+  "timezone": "Africa/Lagos",
+  "platforms": {
+    "photon": {
+      "enabled": true
+    },
+    "telegram": {
+      "enabled": false
+    },
+    "whatsapp": {
+      "enabled": false
+    },
+    "whatsapp_cloud": {
+      "enabled": false
+    },
+    "slack": {
+      "enabled": false
+    }
+  },
+  "platform_toolsets": {
+    "cli": [
+      "memory",
+      "session_search",
+      "tts",
+      "bailey_tasks",
+      "bailey_accounts"
+    ],
+    "cron": [
+      "memory",
+      "session_search"
+    ],
+    "photon": [
+      "memory",
+      "session_search",
+      "tts",
+      "bailey_tasks",
+      "bailey_accounts"
+    ],
+    "whatsapp_cloud": [
+      "memory",
+      "session_search",
+      "tts"
+    ],
+    "slack": [
+      "memory",
+      "session_search",
+      "tts",
+      "bailey_tasks",
+      "bailey_accounts"
+    ]
+  },
+  "memory": {
+    "memory_enabled": true
+  },
+  "stt": {
+    "provider": "groq",
+    "language": "en"
+  },
+  "tts": {
+    "provider": "edge",
+    "edge": {
+      "voice": "en-NG-AbeoNeural"
+    }
+  },
+  "cron": {
+    "wrap_response": false
+  },
+  "sessions": {
+    "retention_days": 90
+  },
+  "agent": {
+    "disabled_toolsets": [
+      "terminal",
+      "file",
+      "browser",
+      "web",
+      "search",
+      "code_execution",
+      "delegation",
+      "connections",
+      "skills",
+      "cronjob",
+      "computer_use"
+    ]
+  },
+  "tools": {
+    "tool_search": {
+      "enabled": "off"
+    }
+  },
+  "plugins": {
+    "enabled": [
+      "bailey-productivity"
+    ]
+  },
+  "known_plugin_toolsets": {
+    "cli": [
+      "bailey_tasks",
+      "bailey_accounts"
+    ],
+    "cron": [
+      "bailey_tasks",
+      "bailey_accounts"
+    ],
+    "photon": [
+      "bailey_tasks",
+      "bailey_accounts"
+    ],
+    "whatsapp_cloud": [
+      "bailey_tasks",
+      "bailey_accounts"
+    ],
+    "slack": [
+      "bailey_tasks",
+      "bailey_accounts"
+    ]
+  }
+}

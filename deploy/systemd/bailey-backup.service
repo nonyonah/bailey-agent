@@ -1,0 +1,18 @@
+[Unit]
+Description=Consistent encrypted Bailey backup
+Wants=network-online.target
+After=network-online.target bailey-gateway.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/bailey/backup.env
+Environment=RESTIC_PASSWORD_FILE=/etc/bailey/restic-password
+ExecStart=/usr/bin/python3 /opt/bailey/deploy/backup.py
+TimeoutStartSec=30min
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=read-only
+ProtectSystem=strict
+ReadWritePaths=/var/lib/bailey-backup
+Environment=RESTIC_CACHE_DIR=/var/lib/bailey-backup/cache

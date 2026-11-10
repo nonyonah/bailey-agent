@@ -1,0 +1,7 @@
+name: bailey-productivity
+version: 0.1.0
+description: Owner-only personal tasks and confirmed commitments; no worker dispatch or external mutations.
+author: Bailey project
+provides_tools:
+  - bailey_tasks
+  - bailey_accounts

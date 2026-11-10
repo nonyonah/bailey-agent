@@ -1,0 +1,11 @@
+/home/bailey/data/logs/*.log {
+    daily
+    rotate 7
+    size 10M
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    su bailey bailey
+}
